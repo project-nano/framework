@@ -1,5 +1,10 @@
 # ChangeLog
 
+## [1.0.1] 2020-01-02
+### Added
+
+- ParamKeyHardware from MAC address 
+
 ## 2019-6-23
 
 ### Added

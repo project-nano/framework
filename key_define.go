@@ -516,4 +516,5 @@ const (
 	ParamKeyHour
 	ParamKeyMinute
 	ParamKeySecond
+	ParamKeyHardware
 )

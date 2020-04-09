@@ -19,6 +19,7 @@ const (
 	ServiceTypeCore = iota
 	ServiceTypeCell
 	ServiceTypeImage
+	ServiceTypeRouter
 )
 
 const (
@@ -54,6 +55,11 @@ const (
 	ResourcePriority
 	ResourceDiskThreshold
 	ResourceNetworkThreshold
+	ResourceCellStorage
+	ResourceStorage
+	ResourceTemplate
+	ResourcePolicyGroup
+	ResourcePolicyRule
 )
 
 
@@ -363,6 +369,49 @@ const (
 	AddAddressRangeResponse = OperateAdd<<OperateOffset | ResourceAddressRange<<ResourceOffset | MessageResponse
 	RemoveAddressRangeRequest  = OperateRemove<<OperateOffset | ResourceAddressRange<<ResourceOffset | MessageRequest
 	RemoveAddressRangeResponse = OperateRemove<<OperateOffset | ResourceAddressRange<<ResourceOffset | MessageResponse
+	
+	//cell storage
+	QueryCellStorageRequest = OperateQuery << OperateOffset | ResourceCellStorage << ResourceOffset | MessageRequest
+	QueryCellStorageResponse = OperateQuery << OperateOffset | ResourceCellStorage << ResourceOffset | MessageResponse
+	AddCellStorageRequest = OperateAdd << OperateOffset | ResourceCellStorage << ResourceOffset | MessageRequest
+	AddCellStorageResponse = OperateAdd << OperateOffset | ResourceCellStorage << ResourceOffset | MessageResponse
+	ModifyCellStorageRequest = OperateModify << OperateOffset | ResourceCellStorage << ResourceOffset | MessageRequest
+	ModifyCellStorageResponse = OperateModify << OperateOffset | ResourceCellStorage << ResourceOffset | MessageResponse
+	RemoveCellStorageRequest = OperateRemove << OperateOffset | ResourceCellStorage << ResourceOffset | MessageRequest
+	RemoveCellStorageResponse = OperateRemove << OperateOffset | ResourceCellStorage << ResourceOffset | MessageResponse
+
+	//system template
+	QueryTemplateRequest = OperateQuery << OperateOffset | ResourceTemplate << ResourceOffset | MessageRequest
+	QueryTemplateResponse = OperateQuery << OperateOffset | ResourceTemplate << ResourceOffset | MessageResponse
+	GetTemplateRequest = OperateGet << OperateOffset | ResourceTemplate << ResourceOffset | MessageRequest
+	GetTemplateResponse = OperateGet << OperateOffset | ResourceTemplate << ResourceOffset | MessageResponse
+	CreateTemplateRequest = OperateCreate << OperateOffset | ResourceTemplate << ResourceOffset | MessageRequest
+	CreateTemplateResponse = OperateCreate << OperateOffset | ResourceTemplate << ResourceOffset | MessageResponse
+	ModifyTemplateRequest = OperateModify << OperateOffset | ResourceTemplate << ResourceOffset | MessageRequest
+	ModifyTemplateResponse = OperateModify << OperateOffset | ResourceTemplate << ResourceOffset | MessageResponse
+	DeleteTemplateRequest = OperateDelete << OperateOffset | ResourceTemplate << ResourceOffset | MessageRequest
+	DeleteTemplateResponse = OperateDelete << OperateOffset | ResourceTemplate << ResourceOffset | MessageResponse
+	
+	//security group
+	QueryPolicyGroupRequest = OperateQuery << OperateOffset | ResourcePolicyGroup << ResourceOffset | MessageRequest
+	QueryPolicyGroupResponse = OperateQuery << OperateOffset | ResourcePolicyGroup << ResourceOffset | MessageResponse
+	GetPolicyGroupRequest = OperateGet << OperateOffset | ResourcePolicyGroup << ResourceOffset | MessageRequest
+	GetPolicyGroupResponse = OperateGet << OperateOffset | ResourcePolicyGroup << ResourceOffset | MessageResponse
+	CreatePolicyGroupRequest = OperateCreate << OperateOffset | ResourcePolicyGroup << ResourceOffset | MessageRequest
+	CreatePolicyGroupResponse = OperateCreate << OperateOffset | ResourcePolicyGroup << ResourceOffset | MessageResponse
+	ModifyPolicyGroupRequest = OperateModify << OperateOffset | ResourcePolicyGroup << ResourceOffset | MessageRequest
+	ModifyPolicyGroupResponse = OperateModify << OperateOffset | ResourcePolicyGroup << ResourceOffset | MessageResponse
+	DeletePolicyGroupRequest = OperateDelete << OperateOffset | ResourcePolicyGroup << ResourceOffset | MessageRequest
+	DeletePolicyGroupResponse = OperateDelete << OperateOffset | ResourcePolicyGroup << ResourceOffset | MessageResponse
+
+	QueryPolicyRuleRequest = OperateQuery << OperateOffset | ResourcePolicyRule << ResourceOffset | MessageRequest
+	QueryPolicyRuleResponse = OperateQuery << OperateOffset | ResourcePolicyRule << ResourceOffset | MessageResponse
+	AddPolicyRuleRequest = OperateAdd << OperateOffset | ResourcePolicyRule << ResourceOffset | MessageRequest
+	AddPolicyRuleResponse = OperateAdd << OperateOffset | ResourcePolicyRule << ResourceOffset | MessageResponse
+	ModifyPolicyRuleRequest = OperateModify << OperateOffset | ResourcePolicyRule << ResourceOffset | MessageRequest
+	ModifyPolicyRuleResponse = OperateModify << OperateOffset | ResourcePolicyRule << ResourceOffset | MessageResponse
+	RemovePolicyRuleRequest = OperateRemove << OperateOffset | ResourcePolicyRule << ResourceOffset | MessageRequest
+	RemovePolicyRuleResponse = OperateRemove << OperateOffset | ResourcePolicyRule << ResourceOffset | MessageResponse
 )
 
 //event
@@ -517,4 +566,11 @@ const (
 	ParamKeyMinute
 	ParamKeySecond
 	ParamKeyHardware
+	ParamKeyData
+	ParamKeyDisplay
+	ParamKeyDevice
+	ParamKeyProtocol
+	ParamKeyInterface
+	ParamKeyAction
+	ParamKeyTemplate
 )

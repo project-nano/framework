@@ -1,12 +1,13 @@
 # ChangeLog
 
-## [1.0.2] 2020-04-09
+## [1.0.2] 2020-04-12
 
 ### Added
 
 - ParamKeyData/ParamKeyDisplay/ParamKeyDevice/ParamKeyProtocol/ParamKeyInterface/ParamKeyAction/ParamKeyTemplate
 - Query/Add/Modify/Remove for Cell Storage
 - Query/Get/Create/Modify/Delete for System Template
+- ResetSecret 
 
 ## [1.0.1] 2020-01-02
 ### Added

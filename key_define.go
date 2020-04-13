@@ -60,6 +60,7 @@ const (
 	ResourceTemplate
 	ResourcePolicyGroup
 	ResourcePolicyRule
+	ResourceSecret
 )
 
 
@@ -72,7 +73,7 @@ const (
 	OperateAdd
 	OperateRemove
 	OperateRegister
-	OperateUnregiser
+	OperateUnregister
 	OperateQueryDetail
 	OperateQueryUnallocated
 	OperateGet
@@ -412,6 +413,10 @@ const (
 	ModifyPolicyRuleResponse = OperateModify << OperateOffset | ResourcePolicyRule << ResourceOffset | MessageResponse
 	RemovePolicyRuleRequest = OperateRemove << OperateOffset | ResourcePolicyRule << ResourceOffset | MessageRequest
 	RemovePolicyRuleResponse = OperateRemove << OperateOffset | ResourcePolicyRule << ResourceOffset | MessageResponse
+	
+	//monitor secret
+	ResetSecretRequest = OperateReset << OperateOffset | ResourceSecret << ResourceOffset | MessageRequest
+	ResetSecretResponse = OperateReset << OperateOffset | ResourceSecret << ResourceOffset | MessageResponse
 )
 
 //event

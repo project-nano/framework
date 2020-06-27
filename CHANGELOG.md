@@ -1,5 +1,15 @@
 # ChangeLog
 
+## [1.0.3] 2020-06-27
+
+### Added
+
+- ParamKeyFrom/ParamKeyTo
+- Get/Add/Modify/Remove GuestRule
+- Change guest rule order/default action
+- Change security policy rule order
+- Sync disk/media images
+
 ## [1.0.2] 2020-04-12
 
 ### Added

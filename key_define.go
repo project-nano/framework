@@ -61,6 +61,7 @@ const (
 	ResourcePolicyGroup
 	ResourcePolicyRule
 	ResourceSecret
+	ResourceGuestRule
 )
 
 
@@ -99,6 +100,9 @@ const (
 	OperateGetBatchDelete
 	OperateStartBatchStop
 	OperateGetBatchStop
+	OperateSynchronize
+	OperateChangeOrder
+	OperateChangeDefault
 )
 
 
@@ -227,6 +231,8 @@ const (
 	PurgeInstanceResponse = OperatePurge<<OperateOffset | ResourceInstance<<ResourceOffset | MessageResponse
 
 	//Media Image
+	SynchronizeMediaImageRequest  = OperateSynchronize<<OperateOffset | ResourceMediaImage<<ResourceOffset | MessageRequest
+	SynchronizeMediaImageResponse = OperateSynchronize<<OperateOffset | ResourceMediaImage<<ResourceOffset | MessageResponse
 
 	QueryMediaImageRequest  = OperateQuery<<OperateOffset | ResourceMediaImage<<ResourceOffset | MessageRequest
 	QueryMediaImageResponse = OperateQuery<<OperateOffset | ResourceMediaImage<<ResourceOffset | MessageResponse
@@ -244,6 +250,8 @@ const (
 	ModifyMediaImageResponse = OperateModify<<OperateOffset | ResourceMediaImage<<ResourceOffset | MessageResponse
 
 	//Disk Image
+	SynchronizeDiskImageRequest  = OperateSynchronize<<OperateOffset | ResourceDiskImage<<ResourceOffset | MessageRequest
+	SynchronizeDiskImageResponse = OperateSynchronize<<OperateOffset | ResourceDiskImage<<ResourceOffset | MessageResponse
 
 	QueryDiskImageRequest  = OperateQuery<<OperateOffset | ResourceDiskImage<<ResourceOffset | MessageRequest
 	QueryDiskImageResponse = OperateQuery<<OperateOffset | ResourceDiskImage<<ResourceOffset | MessageResponse
@@ -411,9 +419,25 @@ const (
 	AddPolicyRuleResponse = OperateAdd << OperateOffset | ResourcePolicyRule << ResourceOffset | MessageResponse
 	ModifyPolicyRuleRequest = OperateModify << OperateOffset | ResourcePolicyRule << ResourceOffset | MessageRequest
 	ModifyPolicyRuleResponse = OperateModify << OperateOffset | ResourcePolicyRule << ResourceOffset | MessageResponse
+	ChangePolicyRuleOrderRequest = OperateChangeOrder << OperateOffset | ResourcePolicyRule << ResourceOffset | MessageRequest
+	ChangePolicyRuleOrderResponse = OperateChangeOrder << OperateOffset | ResourcePolicyRule << ResourceOffset | MessageResponse
 	RemovePolicyRuleRequest = OperateRemove << OperateOffset | ResourcePolicyRule << ResourceOffset | MessageRequest
 	RemovePolicyRuleResponse = OperateRemove << OperateOffset | ResourcePolicyRule << ResourceOffset | MessageResponse
-	
+
+	//Guest Security Policy Rules
+	GetGuestRuleRequest = OperateGet << OperateOffset | ResourceGuestRule << ResourceOffset | MessageRequest
+	GetGuestRuleResponse = OperateGet << OperateOffset | ResourceGuestRule << ResourceOffset | MessageResponse
+	AddGuestRuleRequest = OperateAdd << OperateOffset | ResourceGuestRule << ResourceOffset | MessageRequest
+	AddGuestRuleResponse = OperateAdd << OperateOffset | ResourceGuestRule << ResourceOffset | MessageResponse
+	ModifyGuestRuleRequest = OperateModify << OperateOffset | ResourceGuestRule << ResourceOffset | MessageRequest
+	ModifyGuestRuleResponse = OperateModify << OperateOffset | ResourceGuestRule << ResourceOffset | MessageResponse
+	ChangeGuestRuleDefaultActionRequest = OperateChangeDefault << OperateOffset | ResourceGuestRule << ResourceOffset | MessageRequest
+	ChangeGuestRuleDefaultActionResponse = OperateChangeDefault << OperateOffset | ResourceGuestRule << ResourceOffset | MessageResponse
+	ChangeGuestRuleOrderRequest = OperateChangeOrder << OperateOffset | ResourceGuestRule << ResourceOffset | MessageRequest
+	ChangeGuestRuleOrderResponse = OperateChangeOrder << OperateOffset | ResourceGuestRule << ResourceOffset | MessageResponse
+	RemoveGuestRuleRequest = OperateRemove << OperateOffset | ResourceGuestRule << ResourceOffset | MessageRequest
+	RemoveGuestRuleResponse = OperateRemove << OperateOffset | ResourceGuestRule << ResourceOffset | MessageResponse
+
 	//monitor secret
 	ResetSecretRequest = OperateReset << OperateOffset | ResourceSecret << ResourceOffset | MessageRequest
 	ResetSecretResponse = OperateReset << OperateOffset | ResourceSecret << ResourceOffset | MessageResponse
@@ -578,4 +602,6 @@ const (
 	ParamKeyInterface
 	ParamKeyAction
 	ParamKeyTemplate
+	ParamKeyFrom
+	ParamKeyTo
 )

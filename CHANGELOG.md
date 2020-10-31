@@ -1,10 +1,10 @@
 # ChangeLog
 
-## [1.0.3] 2020-06-27
+## [1.0.3] 2020-10-31
 
 ### Added
 
-- ParamKeyFrom/ParamKeyTo
+- ParamKeyFrom/ParamKeyTo/ParamKeyIndex/ParamKeySecurity/ParamKeyPolicy
 - Get/Add/Modify/Remove GuestRule
 - Change guest rule order/default action
 - Change security policy rule order

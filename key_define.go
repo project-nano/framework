@@ -604,4 +604,7 @@ const (
 	ParamKeyTemplate
 	ParamKeyFrom
 	ParamKeyTo
+	ParamKeyIndex
+	ParamKeySecurity
+	ParamKeyPolicy
 )

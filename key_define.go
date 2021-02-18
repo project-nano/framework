@@ -62,6 +62,7 @@ const (
 	ResourcePolicyRule
 	ResourceSecret
 	ResourceGuestRule
+	ResourceAutoStart
 )
 
 
@@ -103,6 +104,7 @@ const (
 	OperateSynchronize
 	OperateChangeOrder
 	OperateChangeDefault
+	OperateSearch
 )
 
 
@@ -203,6 +205,12 @@ const (
 
 	ResetSystemRequest  = OperateReset<<OperateOffset | ResourceSystem<<ResourceOffset | MessageRequest
 	ResetSystemResponse = OperateReset<<OperateOffset | ResourceSystem<<ResourceOffset | MessageResponse
+
+	SearchGuestRequest  = OperateSearch<<OperateOffset | ResourceGuest<<ResourceOffset | MessageRequest
+	SearchGuestResponse = OperateSearch<<OperateOffset | ResourceGuest<<ResourceOffset | MessageResponse
+
+	ModifyAutoStartRequest  = OperateModify<<OperateOffset | ResourceAutoStart<<ResourceOffset | MessageRequest
+	ModifyAutoStartResponse = OperateModify<<OperateOffset | ResourceAutoStart<<ResourceOffset | MessageResponse
 
 	//instance
 

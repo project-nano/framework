@@ -1,5 +1,11 @@
 # ChangeLog
 
+## [1.0.4] 2021-02-18
+
+### Added
+
+- Request/Response: SearchGuest/ModifyAutoStart
+
 ## [1.0.3] 2020-10-31
 
 ### Added

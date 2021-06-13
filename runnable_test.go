@@ -62,6 +62,14 @@ func Test_MemberRunner(t *testing.T)  {
 	if err != nil{
 		t.Fatalf("start runner fail: %s", err.Error())
 	}
+	if err = runner.Start(); nil == err{
+		t.Fatal("duplicate start success")
+	}
+	t.Logf("duplicate start fail: %s", err.Error())
+	if !runner.IsRunning(){
+		t.Fatal("runner not in running status")
+	}
+	t.Log("runner in running status")
 	var exitChan = make(chan bool, 1)
 	go func() {
 		runner.Stop()
@@ -73,5 +81,14 @@ func Test_MemberRunner(t *testing.T)  {
 		t.Fatal("stop runner timeout")
 	case <- exitChan:
 		t.Log("runner stopped")
+		if runner.IsRunning(){
+			t.Fatal("runner in running status")
+		}
+		t.Log("runner not in running status")
+		if err = runner.Stop(); nil == err{
+			t.Fatal("duplicate stop success")
+		}
+		t.Logf("duplicate stop fail: %s", err.Error())
 	}
+	t.Log("member runner test: ok")
 }

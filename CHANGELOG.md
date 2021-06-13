@@ -1,5 +1,12 @@
 # ChangeLog
 
+## [1.0.5] 2021-06-14
+
+### Added
+
+- Add IsRunning to SimpleRunner
+- Add Snapshot interface to daemon
+
 ## [1.0.4] 2021-02-18
 
 ### Added

@@ -1,19 +1,20 @@
 package framework
 
 import (
+	"encoding/json"
+	"errors"
+	"fmt"
+	"github.com/sevlyar/go-daemon"
+	"log"
 	"os"
 	"path/filepath"
 	"syscall"
-	"fmt"
-	"log"
-	"github.com/sevlyar/go-daemon"
-	"encoding/json"
-	"errors"
 )
 
 type DaemonizedService interface {
 	Start() (output string, err error)
 	Stop() (output string, err error)
+	Snapshot() (output string, err error)
 }
 
 type asyncOperateResult struct {
@@ -36,6 +37,7 @@ func ProcessDaemon(executeName string, configGenerator ConfigGenerator, serviceG
 		StopCommand      = "stop"
 		StatusCommand    = "status"
 		HaltCommand      = "halt"
+		SnapshotCommand  = "snap"
 		LogPathName      = "log"
 	)
 	if len(os.Args) != ValidArguesCount {
@@ -56,7 +58,9 @@ func ProcessDaemon(executeName string, configGenerator ConfigGenerator, serviceG
 		PidFileName: pidFileName,
 		PidFilePerm: daemon.FILE_PERM,
 	}
+
 	daemon.AddCommand(daemon.StringFlag(&command, StopCommand), syscall.SIGTERM, onStopDaemon)
+	daemon.AddCommand(daemon.StringFlag(&command, SnapshotCommand), syscall.SIGUSR1, onDaemonSnapshot)
 	daemon.AddCommand(daemon.StringFlag(&command, HaltCommand), syscall.SIGKILL, nil)
 
 	switch command {
@@ -85,6 +89,32 @@ func ProcessDaemon(executeName string, configGenerator ConfigGenerator, serviceG
 			}
 		}
 		return
+	case SnapshotCommand:
+		var process *os.Process
+		if process, err = context.Search(); err != nil {
+			fmt.Printf("%s is already stopped\n", executeName)
+			return
+		} else if !isRunning(process) {
+			fmt.Printf("%s is already stopped (process %d not running)\n", executeName, process.Pid)
+		} else {
+			defer os.Remove(pipFileName)
+			if err = createPipe(pipFileName); err != nil{
+				fmt.Printf("open pipe fail: %s\n", err.Error())
+				return
+			}
+			go daemon.SendCommands(process)
+			var msg string
+			msg, err = readPipe(pipFileName)
+			if err != nil {
+				fmt.Printf("capture snapshot of %s fail: %s\n", executeName, err.Error())
+			} else if "" != msg {
+				fmt.Println(msg)
+				fmt.Printf("capture snapshot of %s success\n", executeName)
+			} else {
+				fmt.Printf("capture snapshot of %s success\n", executeName)
+			}
+		}
+		return
 	case HaltCommand:
 		if process, err := context.Search(); err != nil {
 			fmt.Printf("%s is already stopped\n", executeName)
@@ -105,7 +135,6 @@ func ProcessDaemon(executeName string, configGenerator ConfigGenerator, serviceG
 		}
 		return
 	case StartCommand:
-
 		if err := configGenerator(workingPath); err != nil {
 			fmt.Printf("generate config fail: %s\n", err.Error())
 			return
@@ -174,6 +203,25 @@ func onStopDaemon(sig os.Signal) error {
 	msg, err := daemonizedService.Stop()
 	if err != nil{
 		log.Printf("stop service fail: %s", err.Error())
+		notifyErrorToPipe(pipFileName, err.Error())
+	}else{
+		notifyMessageToPipe(pipFileName, msg)
+	}
+	return daemon.ErrStop
+}
+
+func onDaemonSnapshot(sig os.Signal) error {
+	if nil == daemonizedService{
+		log.Println("invalid daemon service")
+		return daemon.ErrStop
+	}
+	if "" == pipFileName{
+		log.Println("invalid pipe file")
+		return daemon.ErrStop
+	}
+	msg, err := daemonizedService.Snapshot()
+	if err != nil{
+		log.Printf("invoke snapshot fail: %s", err.Error())
 		notifyErrorToPipe(pipFileName, err.Error())
 	}else{
 		notifyMessageToPipe(pipFileName, msg)
@@ -309,5 +357,5 @@ func redirectLog(executeName, logPathName string) (err error) {
 }
 
 func printUsage(executeName string) {
-	fmt.Printf("Usage: %s [start|stop|status|halt]\n", executeName)
+	fmt.Printf("Usage: %s [start|stop|status|halt|snap]\n", executeName)
 }

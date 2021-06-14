@@ -226,7 +226,7 @@ func onDaemonSnapshot(sig os.Signal) error {
 	}else{
 		notifyMessageToPipe(pipFileName, msg)
 	}
-	return daemon.ErrStop
+	return nil
 }
 
 func readMessageFromPipe(pipeName string) (message string, err error) {

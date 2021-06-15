@@ -1,5 +1,11 @@
 # ChangeLog
 
+## [1.0.7] 2021-06-15
+
+### Changed
+
+- Update go.sum
+
 ## [1.0.6] 2021-06-15
 
 ### Fixed

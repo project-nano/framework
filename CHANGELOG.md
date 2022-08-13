@@ -1,4 +1,9 @@
 # ChangeLog
+## [1.0.8] 2022-08-14
+
+### Fixed
+
+- isRunning panic with null process
 
 ## [1.0.5] 2021-06-14
 

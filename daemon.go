@@ -327,7 +327,6 @@ func getWorkingPath() (path string, err error) {
 }
 
 func isRunning(process *os.Process) bool {
-	fmt.Printf("isRunning call proccess %p", process)
 	if nil == process {
 		return false
 	}

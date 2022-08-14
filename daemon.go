@@ -51,7 +51,7 @@ func ProcessDaemon(executeName string, configGenerator ConfigGenerator, serviceG
 	}
 	var command = os.Args[1]
 	var pidFileName = filepath.Join(workingPath, fmt.Sprintf("%s.pid", executeName))
-	if "" == pipFileName{
+	if "" == pipFileName {
 		pipFileName = filepath.Join(workingPath, fmt.Sprintf("%s.pip", executeName))
 	}
 	context := &daemon.Context{
@@ -65,14 +65,14 @@ func ProcessDaemon(executeName string, configGenerator ConfigGenerator, serviceG
 
 	switch command {
 	case StopCommand:
-		if process, err := context.Search(); err != nil {
+		if process, err := context.Search(); err != nil || nil == process {
 			fmt.Printf("%s is already stopped\n", executeName)
 			return
 		} else if !isRunning(process) {
 			fmt.Printf("%s is already stopped (process %d not running)\n", executeName, process.Pid)
 		} else {
 			defer os.Remove(pipFileName)
-			if err = createPipe(pipFileName); err != nil{
+			if err = createPipe(pipFileName); err != nil {
 				fmt.Printf("open pipe fail: %s\n", err.Error())
 				return
 			}
@@ -91,14 +91,14 @@ func ProcessDaemon(executeName string, configGenerator ConfigGenerator, serviceG
 		return
 	case SnapshotCommand:
 		var process *os.Process
-		if process, err = context.Search(); err != nil {
+		if process, err = context.Search(); err != nil || nil == process {
 			fmt.Printf("%s is already stopped\n", executeName)
 			return
 		} else if !isRunning(process) {
 			fmt.Printf("%s is already stopped (process %d not running)\n", executeName, process.Pid)
 		} else {
 			defer os.Remove(pipFileName)
-			if err = createPipe(pipFileName); err != nil{
+			if err = createPipe(pipFileName); err != nil {
 				fmt.Printf("open pipe fail: %s\n", err.Error())
 				return
 			}
@@ -116,7 +116,7 @@ func ProcessDaemon(executeName string, configGenerator ConfigGenerator, serviceG
 		}
 		return
 	case HaltCommand:
-		if process, err := context.Search(); err != nil {
+		if process, err := context.Search(); err != nil || nil == process {
 			fmt.Printf("%s is already stopped\n", executeName)
 		} else if !isRunning(process) {
 			fmt.Printf("%s is already stopped (process %d not running)\n", executeName, process.Pid)
@@ -126,7 +126,7 @@ func ProcessDaemon(executeName string, configGenerator ConfigGenerator, serviceG
 		return
 	case StatusCommand:
 		process, err := context.Search()
-		if err != nil {
+		if err != nil || nil == process {
 			fmt.Printf("%s is stopped\n", executeName)
 		} else if !isRunning(process) {
 			fmt.Printf("%s is stopped (pid %d)\n", executeName, process.Pid)
@@ -139,7 +139,7 @@ func ProcessDaemon(executeName string, configGenerator ConfigGenerator, serviceG
 			fmt.Printf("generate config fail: %s\n", err.Error())
 			return
 		}
-		if process, err := context.Search(); err == nil {
+		if process, err := context.Search(); err == nil && nil != process {
 			if isRunning(process) {
 				fmt.Printf("%s is already running\n", executeName)
 				return
@@ -192,38 +192,38 @@ func ProcessDaemon(executeName string, configGenerator ConfigGenerator, serviceG
 }
 
 func onStopDaemon(sig os.Signal) error {
-	if nil == daemonizedService{
+	if nil == daemonizedService {
 		log.Println("invalid daemon service")
 		return daemon.ErrStop
 	}
-	if "" == pipFileName{
+	if "" == pipFileName {
 		log.Println("invalid pipe file")
 		return daemon.ErrStop
 	}
 	msg, err := daemonizedService.Stop()
-	if err != nil{
+	if err != nil {
 		log.Printf("stop service fail: %s", err.Error())
 		notifyErrorToPipe(pipFileName, err.Error())
-	}else{
+	} else {
 		notifyMessageToPipe(pipFileName, msg)
 	}
 	return daemon.ErrStop
 }
 
 func onDaemonSnapshot(sig os.Signal) error {
-	if nil == daemonizedService{
+	if nil == daemonizedService {
 		log.Println("invalid daemon service")
 		return daemon.ErrStop
 	}
-	if "" == pipFileName{
+	if "" == pipFileName {
 		log.Println("invalid pipe file")
 		return daemon.ErrStop
 	}
 	msg, err := daemonizedService.Snapshot()
-	if err != nil{
+	if err != nil {
 		log.Printf("invoke snapshot fail: %s", err.Error())
 		notifyErrorToPipe(pipFileName, err.Error())
-	}else{
+	} else {
 		notifyMessageToPipe(pipFileName, msg)
 	}
 	return nil
@@ -231,7 +231,7 @@ func onDaemonSnapshot(sig os.Signal) error {
 
 func readMessageFromPipe(pipeName string) (message string, err error) {
 	defer os.Remove(pipeName)
-	if err = createPipe(pipeName);err != nil{
+	if err = createPipe(pipeName); err != nil {
 		return
 	}
 	message, err = readPipe(pipeName)
@@ -242,10 +242,10 @@ func createPipe(pipeName string) (err error) {
 	const (
 		PipeFilePerm = 0600
 	)
-	if _, err = os.Stat(pipeName); !os.IsNotExist(err){
+	if _, err = os.Stat(pipeName); !os.IsNotExist(err) {
 		os.Remove(pipeName)
 	}
-	if err = syscall.Mkfifo(pipeName, PipeFilePerm);err != nil{
+	if err = syscall.Mkfifo(pipeName, PipeFilePerm); err != nil {
 		return
 	}
 
@@ -258,7 +258,7 @@ func readPipe(pipeName string) (message string, err error) {
 	)
 	var pipe *os.File
 	pipe, err = os.OpenFile(pipeName, os.O_RDONLY, PipeFilePerm)
-	if err != nil{
+	if err != nil {
 		return
 	}
 	defer pipe.Close()
@@ -274,9 +274,9 @@ func readPipe(pipeName string) (message string, err error) {
 
 		return "", fmt.Errorf("unmarshal fail: %s, data %s", err.Error(), data[:n])
 	}
-	if result.Error != ""{
+	if result.Error != "" {
 		err = errors.New(result.Error)
-	}else{
+	} else {
 		message = result.Output
 	}
 	return
@@ -287,13 +287,13 @@ func notifyMessageToPipe(pipeName, message string) (err error) {
 		PipeFilePerm = 0600
 	)
 	pip, err := os.OpenFile(pipeName, os.O_RDWR, PipeFilePerm)
-	if err != nil{
+	if err != nil {
 		return
 	}
 	defer pip.Close()
-	var result = asyncOperateResult{Output:message}
+	var result = asyncOperateResult{Output: message}
 	data, err := json.MarshalIndent(result, "", " ")
-	if err != nil{
+	if err != nil {
 		return
 	}
 	_, err = pip.Write(data)
@@ -305,13 +305,13 @@ func notifyErrorToPipe(pipeName, message string) (err error) {
 		PipeFilePerm = 0600
 	)
 	pip, err := os.OpenFile(pipeName, os.O_RDWR, PipeFilePerm)
-	if err != nil{
+	if err != nil {
 		return
 	}
 	defer pip.Close()
-	var result = asyncOperateResult{Error:message}
+	var result = asyncOperateResult{Error: message}
 	data, err := json.MarshalIndent(result, "", " ")
-	if err != nil{
+	if err != nil {
 		return
 	}
 	_, err = pip.Write(data)
@@ -327,6 +327,9 @@ func getWorkingPath() (path string, err error) {
 }
 
 func isRunning(process *os.Process) bool {
+	if nil == process {
+		return false
+	}
 	if err := process.Signal(syscall.Signal(0)); err == nil {
 		return true
 	} else {

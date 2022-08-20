@@ -1,4 +1,11 @@
 # ChangeLog
+
+## [1.0.9] 2022-08-22
+
+### Changed
+
+- Remove debug log in Daemion.isRunning
+
 ## [1.0.8] 2022-08-14
 
 ### Fixed

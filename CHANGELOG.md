@@ -1,5 +1,12 @@
 # ChangeLog
 
+## [1.0.10] 2023-09-07
+
+### Changed
+
+- update to go 1.19
+- update dependent packages
+
 ## [1.0.9] 2022-08-22
 
 ### Changed
